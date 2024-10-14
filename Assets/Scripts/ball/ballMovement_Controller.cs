@@ -7,6 +7,14 @@ public class ballMovement_Controller : MonoBehaviour
     private Rigidbody2D rb;
     Vector2 actualVelocity;
 
+    private void OnEnable()
+    {
+        if (bombManager.bombManagerInstance != null)
+        {
+            bombManager.bombManagerInstance.bombUsedEvent += handleBombUsed; //subscribe to the event
+        }
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -28,5 +36,18 @@ public class ballMovement_Controller : MonoBehaviour
             Vector2 invertedVelocity = new Vector2(-actualVelocity.x, actualVelocity.y);
             rb.velocity = invertedVelocity;
         }
+    }
+
+    private void OnDisable()
+    {
+        if (bombManager.bombManagerInstance != null)
+        {
+            bombManager.bombManagerInstance.bombUsedEvent -= handleBombUsed; //unsubscribe from the event
+        }
+    }
+
+    void handleBombUsed()
+    {
+        ballPool.Instance.returnObject(gameObject);
     }
 }

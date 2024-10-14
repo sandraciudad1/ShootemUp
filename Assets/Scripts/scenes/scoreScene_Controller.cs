@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class scoreScene_Controller : MonoBehaviour
 {
-    int points;
     [SerializeField] TextMeshProUGUI yourScore;
     [SerializeField] TextMeshProUGUI firstScore;
     [SerializeField] TextMeshProUGUI secondScore;
@@ -14,46 +13,41 @@ public class scoreScene_Controller : MonoBehaviour
 
     void Start()
     {
-        points = PlayerPrefs.GetInt("points", 0);
-        yourScore.text = points.ToString();
-        updateRanking(points);
-    }
-
-    void Update()
-    {
-        
+        yourScore.text = gameManager.gameManagerInstance.points.ToString();
+        updateRanking(gameManager.gameManagerInstance.points);
     }
 
     void updateRanking(int points)
     {
-        int first = PlayerPrefs.GetInt("first", 0);
-        int second = PlayerPrefs.GetInt("second", 0);
-        int third = PlayerPrefs.GetInt("third", 0);
+        int first = gameManager.gameManagerInstance.first;
+        int second = gameManager.gameManagerInstance.second;
+        int third = gameManager.gameManagerInstance.third;
 
         if (points > first)
         {
-            PlayerPrefs.SetInt("third", second);
-            PlayerPrefs.SetInt("second", first);
-            PlayerPrefs.SetInt("first", points);
+            gameManager.gameManagerInstance.third = gameManager.gameManagerInstance.second;
+            gameManager.gameManagerInstance.second = gameManager.gameManagerInstance.first;
+            gameManager.gameManagerInstance.first = gameManager.gameManagerInstance.points;
         }
         else if (points > second)
         {
-            PlayerPrefs.SetInt("third", second);
-            PlayerPrefs.SetInt("second", points);
+            gameManager.gameManagerInstance.third = gameManager.gameManagerInstance.second;
+            gameManager.gameManagerInstance.second = gameManager.gameManagerInstance.points;
         }
         else if (points > third)
         {
-            PlayerPrefs.SetInt("third", points);
+            gameManager.gameManagerInstance.third = gameManager.gameManagerInstance.points;
         }
 
-        firstScore.text = PlayerPrefs.GetInt("first").ToString();
-        secondScore.text = PlayerPrefs.GetInt("second").ToString();
-        thirdScore.text = PlayerPrefs.GetInt("third").ToString();
+        firstScore.text = gameManager.gameManagerInstance.first.ToString();
+        secondScore.text = gameManager.gameManagerInstance.second.ToString();
+        thirdScore.text = gameManager.gameManagerInstance.third.ToString();
     }
 
     public void arrowBtn()
     {
-        PlayerPrefs.SetInt("points", 0);
+        gameManager.gameManagerInstance.points = 0;
+        gameManager.gameManagerInstance.SaveProgress();
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.LoadScene("mainScene");
     }

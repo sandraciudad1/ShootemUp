@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class bombCollision_Controller : MonoBehaviour
 {
-    int points;
     [SerializeField] private GameObject pinkBall;
     [SerializeField] private GameObject redBall;
     [SerializeField] private GameObject yellowBall;
@@ -12,10 +11,6 @@ public class bombCollision_Controller : MonoBehaviour
     [SerializeField] private GameObject blueBall;
     int numberPinkBalls, numberRedBalls, numberYellowBalls, numberGreenBalls, numberBlueBalls;
     GameObject[] pinkBalls, redBalls, yellowBalls, greenBalls, blueBalls;
-    void Start()
-    {
-        points = PlayerPrefs.GetInt("points", 0);
-    }
         
     void Update()
     {
@@ -36,35 +31,10 @@ public class bombCollision_Controller : MonoBehaviour
     {
         if (other.CompareTag("cannon"))
         {
-            foreach (GameObject pink in pinkBalls)
-            {
-                Destroy(pink);
-            }
-            foreach (GameObject red in redBalls)
-            {
-                Destroy(red);
-            }
-            foreach (GameObject yellow in yellowBalls)
-            {
-                Destroy(yellow);
-            }
-            foreach (GameObject green in greenBalls)
-            {
-                Destroy(green);
-            }
-            foreach (GameObject blue in blueBalls)
-            {
-                Destroy(blue);
-            }
-            
-            int pinkPoints = numberPinkBalls * 10;
-            int redPoints = numberRedBalls * 25;
-            int yellowPoints = numberYellowBalls * 45;
-            int greenPoints = numberGreenBalls * 70;
-            int bluePoints = numberBlueBalls * 100;
+            bombManager.bombManagerInstance.bombUsed();
 
-            points = points + pinkPoints + redPoints + yellowPoints + greenPoints + bluePoints;
-            PlayerPrefs.SetInt("points", points);
+            managePoints();
+
             Destroy(gameObject);
             ballGenerator_Controller ballGen = GameObject.Find("gameplayCamera").GetComponent<ballGenerator_Controller>();
             if (ballGen != null)
@@ -74,5 +44,9 @@ public class bombCollision_Controller : MonoBehaviour
         }
     }
 
-
+    void managePoints()
+    {
+        gameManager.gameManagerInstance.points = gameManager.gameManagerInstance.points + (numberPinkBalls*10) + (numberRedBalls*25) + (numberYellowBalls*45) + (numberGreenBalls*70) + (numberBlueBalls*100);
+        gameManager.gameManagerInstance.SaveProgress();
+    }
 }

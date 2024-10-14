@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class bulletGenerator_Controller : MonoBehaviour
 {
-    [SerializeField] GameObject cannon;
     [SerializeField] GameObject bullet;
-    float bulletSpeed = 20f;
-    
-    void Start()
-    {
-        
-    }
+    static float bulletSpeed = 20f;
+    Vector3 cannonPosition;
 
-    // Update is called once per frame
+    [SerializeField] bulletPool bulletPool;
+
     void Update()
     {
+        if (cannonMovement_Controller.cannonInstance != null)
+        {
+            cannonPosition = cannonMovement_Controller.cannonInstance.transform.position;
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Vector2 position = new Vector2((cannon.transform.position.x - 0.06f), (cannon.transform.position.y + 0.4f));
-            GameObject newBullet = Instantiate(bullet, position, Quaternion.identity);
+            Vector2 position = new Vector2((cannonPosition.x - 0.06f), (cannonPosition.y + 0.4f));
+            GameObject newBullet = bulletPool.getObject();
+            newBullet.transform.position = position;
 
             Rigidbody2D rb = newBullet.GetComponent<Rigidbody2D>();
             if (rb != null)

@@ -7,20 +7,6 @@ public class mainScene_Controller : MonoBehaviour
 {
     [SerializeField] GameObject infoScreen;
     [SerializeField] GameObject crossIcon;
-    
-    void Start()
-    {
-        /*PlayerPrefs.SetInt("first", 0);
-        PlayerPrefs.SetInt("second", 0);
-        PlayerPrefs.SetInt("third", 0);
-        PlayerPrefs.SetInt("points", 0);
-        */
-    }
-
-    void Update()
-    {
-        
-    }
 
     public void infoBtn_Pressed()
     {

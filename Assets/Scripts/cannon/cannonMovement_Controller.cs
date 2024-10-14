@@ -4,13 +4,27 @@ using UnityEngine;
 
 public class cannonMovement_Controller : MonoBehaviour
 {
+    // Static Instance
+    public static cannonMovement_Controller cannonInstance { get; private set; }
+
     Vector3 movement;
     Rigidbody2D rb;
-    float speed = 60f;
+    static float speed = 60f;
 
     [SerializeField] GameObject rightWheel;
     [SerializeField] GameObject leftWheel;
-    float rotationSpeed = 360f; 
+    static float rotationSpeed = 360f;
+
+    private void Awake()
+    {
+        if (cannonInstance == null)
+        {
+            cannonInstance = this;
+        } else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {

@@ -11,8 +11,8 @@ public class ballGenerator_Controller : MonoBehaviour
     [SerializeField] GameObject greenBall;
     public GameObject[] objectsArray;
 
-    float spawnInterval = 12f;
-    float horizontalForceRange = 5f;
+    static float spawnInterval = 12f;
+    static float horizontalForceRange = 5f;
     int ballCount = 0;
 
     void Start()
@@ -23,10 +23,10 @@ public class ballGenerator_Controller : MonoBehaviour
     public void SpawnRandomBall()
     {
         int randomIndex = Random.Range(0, objectsArray.Length);
-        GameObject ballToSpawn = objectsArray[randomIndex];
         Vector2 randomPosition = new Vector2(Random.Range(-8f, 8f), Random.Range(4.6f, 4.65f));
+        GameObject spawnedBall = ballPool.Instance.getObject(randomIndex);
+        spawnedBall.transform.position = randomPosition;
 
-        GameObject spawnedBall = Instantiate(ballToSpawn, randomPosition, Quaternion.identity);
         Rigidbody2D rb = spawnedBall.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
@@ -47,10 +47,5 @@ public class ballGenerator_Controller : MonoBehaviour
         spawnInterval = Mathf.Max(1f, spawnInterval - 1f); 
         CancelInvoke("SpawnRandomBall");
         InvokeRepeating("SpawnRandomBall", spawnInterval, spawnInterval);
-    }
-
-    void Update()
-    {
-        
     }
 }
